@@ -27,3 +27,5 @@ dist-ssr
 
 .env
 infra/.terraform
+infra/*.lock.hcl
+infra/*.tfstate*

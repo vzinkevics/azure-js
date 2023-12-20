@@ -8,12 +8,15 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { theme } from "~/theme";
 import axios from "axios";
+import { AppConfigurationClient } from "@azure/app-configuration";
 
-axios.interceptors.request.use(function (config) {
+const client = new AppConfigurationClient(import.meta.env.VITE_CONFIG_CONNECTION_STRING);
+
+axios.interceptors.request.use(async function (config) {
+  const SUBSCRIPTION_KEY = await client.getConfigurationSetting({ key: "APIM_SUBSCRIPTION_KEY" });
   config.headers = {
     ...config.headers,
-    // @ts-ignore
-    "Ocp-Apim-Subscription-Key": import.meta.env.APIM_SUBSCRIPTION_KEY,
+    "Ocp-Apim-Subscription-Key": SUBSCRIPTION_KEY?.value as any,
     "Cache-Control": "private, max-age=100",
   };
   return config;

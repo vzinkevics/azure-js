@@ -32,3 +32,10 @@ resource "azurerm_storage_account" "front_end_storage_account" {
     index_document = "index.html"
   }
 }
+
+resource "azurerm_app_configuration" "app_config" {
+  name                = "appConfig105"
+  resource_group_name = azurerm_resource_group.front_end_rg.name
+  location            = azurerm_resource_group.front_end_rg.location
+  sku                 = "free"
+}

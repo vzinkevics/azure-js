@@ -7,6 +7,20 @@ import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { theme } from "~/theme";
+import axios from "axios";
+
+axios.interceptors.request.use(function (config) {
+  config.headers = {
+    ...config.headers,
+    // @ts-ignore
+    "Ocp-Apim-Subscription-Key": import.meta.env.APIM_SUBSCRIPTION_KEY,
+    "Cache-Control": "private, max-age=100",
+  };
+  return config;
+}, function (error) {
+  // Do something with request error
+  return Promise.reject(error);
+});
 
 const queryClient = new QueryClient({
   defaultOptions: {
